@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{> head subTitle=client.name}}
+    <body class="no-space">
+        <header class="header">
+            <div class="container container--small header__container">
+                <h1 class="header__title flat flex flex--aligned">
+                    <a class="header__title" href="/client" style="text-decoration: none;">
+                        Logging Down Under
+                    </a>
+                </h1>
+                <div class="header__user" id="menuBtn">
+                    <i class="fal fa-user-circle"></i>
+                    <span class="header__name">{{ contact.name }}</span>
+                </div>
+            </div>
+        </header>
+        {{> sidebar contact }}
+        <input type="hidden" id="clientId" value={{ client.id }} />
+        <div class="client-wrap wrapper">
+            <div class="hero">
+                <div class="container container--small">
+                    <div class="hero__content">
+                        <h1 class="flat hero__title">
+                            {{ client.name }}
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container container--small holes">
+                {{#ifGT holes.length 0 }}
+                {{#each holes}}
+                <div class="hole" data-hole-id="{{ id }}">
+                    <header class="hole__header">
+                        <h3 class="hole__number flat">
+                            <strong>{{ code }}</strong>
+                            <small><i class="js-file-count">3</i> files</small>
+                        </h3>
+                        <div class="loading_hide" id="downloading_{{ id }}">
+                            <h5 class="loading__text">Downloading</h5>
+                            <img style="block" src="/img/loader.gif" alt="downloading" width="30" height="30"/>
+                        </div>
+                        <div class="hole__actions">
+                            <div class="hole__arrow js-hole-arrow">
+                                <i class="fal fa-chevron-down"></i>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="hole__body">
+                        <div class="files files--{{id}} files--loading">
+                            <div class="files__spinner">
+                                <div class="sk-fading-circle">
+                                    <div class="sk-circle1 sk-circle"></div>
+                                    <div class="sk-circle2 sk-circle"></div>
+                                    <div class="sk-circle3 sk-circle"></div>
+                                    <div class="sk-circle4 sk-circle"></div>
+                                    <div class="sk-circle5 sk-circle"></div>
+                                    <div class="sk-circle6 sk-circle"></div>
+                                    <div class="sk-circle7 sk-circle"></div>
+                                    <div class="sk-circle8 sk-circle"></div>
+                                    <div class="sk-circle9 sk-circle"></div>
+                                    <div class="sk-circle10 sk-circle"></div>
+                                    <div class="sk-circle11 sk-circle"></div>
+                                    <div class="sk-circle12 sk-circle"></div>
+                                </div>
+                            </div>
+                            <div class="files__body">
+                                <div id="filesEl-{{id}}"></div>
+                            </div>
+                            <div class="files__empty">
+                                <div class="empty-state">
+                                    <h1 class="pressed">
+                                        <strong>No files to show</strong>
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="empty-state">
+                <h1 class="pressed"><strong>No holes to show</strong></h1>
+            </div>
+            {{/ifGT}}
+        </div>
+
+        <!-- Add Client Modal -->
+        <div class="modal" id="modal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h2 class="flat"><strong>Send a message</strong></h2>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="modal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="sendMessageForm">
+                        <div class="form__body">
+                            <input class="input" type="hidden" id="sendMessageFileId" name="fileid" readonly>
+                            <div class="form__group">
+                                <label for="contactName-1">File</label>
+                                <input class="input" type="text" id="fileName" name="fileName" readonly>
+                            </div>
+                            <div class="form__group">
+                                <label for="contactEmail-1">Message</label>
+                                <textarea class="input" id="sendMessageText" required name="message" autofocus></textarea>
+                            </div>
+                        </div>
+                        <div class="form__footer">
+                            <button type="submit" class="btn btn--block form__button">Send</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/common.js"></script>
+        <script src="/js/contact.js"></script>
+    </body>
+</html>

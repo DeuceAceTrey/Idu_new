@@ -1,0 +1,20 @@
+{
+  "name": "ldu",
+  "homepage": "https://github.com/jsncbt/ldu",
+  "authors": [
+    "Jason Corbett <jsncbt@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "font-awesome": "^4.7.0"
+  }
+}

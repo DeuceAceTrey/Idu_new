@@ -1,0 +1,99 @@
+{
+    "clients": [
+        {
+            "name": "Caledon Resources",
+            "holes": [
+                {
+                    "code": "4321CAL",
+                    "files": [
+                        {
+                            "name": "527_tq_left_client_RGB (1).png",
+                            "size": 1091885,
+                            "type": "image/png",
+                            "uploaded": 1495675987000
+                        },
+                        {
+                            "name": "527_tq_left_client_RGB.psd",
+                            "size": 1091885,
+                            "type": "image/vnd.adobe.photoshop",
+                            "uploaded": 1495675962000
+                        },
+                        {
+                            "name": "567_10153292280896932_2227437110637788528_n.jpg",
+                            "size": 243773,
+                            "type": "image/jpeg",
+                            "uploaded": 1479464544000
+                        },
+                        {
+                            "name": "644_upward_front_client_RGB (1).png",
+                            "size": 3272243,
+                            "type": "image/png",
+                            "uploaded": 1495676145000
+                        }
+                    ]
+                },
+                {
+                    "code": "321",
+                    "files": [
+                        {
+                            "name": "527_tq_left_client_RGB (1).png",
+                            "size": 1091885,
+                            "type": "image/png",
+                            "uploaded": 1495675987000
+                        },
+                        {
+                            "name": "527_tq_left_client_RGB.psd",
+                            "size": 1091885,
+                            "type": "image/vnd.adobe.photoshop",
+                            "uploaded": 1495675962000
+                        }
+                    ]
+                }
+            ],
+            "contacts": [
+                {
+                    "name": "Mr A",
+                    "email": "a@a.com",
+                    "password": "a"
+                }
+            ],
+            "lastLoggedInDays": 1
+        },
+        {
+            "name": "Second client",
+            "holes": [
+                {
+                    "code": "4321Client",
+                    "files": [
+                        {
+                            "name": "527_tq_left_client_RGB (1).png",
+                            "size": 1091885,
+                            "type": "image/png",
+                            "uploaded": 1495675987000
+                        },
+                        {
+                            "name": "527_tq_left_client_RGB.psd",
+                            "size": 1091885,
+                            "type": "image/vnd.adobe.photoshop",
+                            "uploaded": 1495675962000
+                        }
+                    ],
+                    "clientId": "2"
+                }
+            ],
+            "contacts": [
+                {
+                    "name": "Mr D",
+                    "email": "d@d.com",
+                    "password": "d"
+                },
+                {
+                    "name": "Mrs E",
+                    "email": "e@e.com",
+                    "password": "e"
+                }
+            ],
+            "lastLoggedInDays": 1
+        }
+    ]
+}

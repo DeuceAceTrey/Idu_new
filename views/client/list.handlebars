@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{> head subTitle=contact.name}}
+    <body class="no-space">
+        <header class="header">
+            <div class="container container--small header__container">
+                <h1 class="header__title flat flex flex--aligned">
+                    <span class="header__title">
+                        Logging Down Under
+                    </span>
+                </h1>
+                <div class="header__user" id="menuBtn">
+                    <i class="fal fa-user-circle"></i>
+                    <span class="header__name">{{ contact.name }}</span>
+                </div>
+            </div>
+        </header>
+        {{> sidebar contact }}
+        <div class="client-wrap wrapper">
+            <div class="hero">
+                <div class="container container--small">
+                    <div class="hero__content">
+                        <h1 class="flat hero__title">
+                            Select Client
+                        </h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container container--small clients">
+                {{#ifGT clients.length 0 }}
+                {{#each clients}}
+                <div class="hole" data-client-id="{{ id }}">
+                    <a href="/client/dashboard/{{id}}" style="text-decoration: none;">
+                        <header class="hole__header">
+                            <h3 class="hole__number flat">
+                                <strong>{{ name }}</strong>
+                            </h3>
+                            <div class="hole__actions">
+                                <div class="hole__arrow js-hole-arrow">
+                                    <i class="fal fa-chevron-right"></i>
+                                </div>
+                            </div>
+                        </header>
+                    </a>
+                </div>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="empty-state">
+                <h1 class="pressed"><strong>No clients to show</strong></h1>
+            </div>
+            {{/ifGT}}
+        </div>
+
+        <script src="/js/common.js"></script>
+        <script src="/js/contact.js"></script>
+    </body>
+</html>

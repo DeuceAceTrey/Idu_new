@@ -1,0 +1,10 @@
+node_modules
+bower_components
+typings
+typings.json
+yarn-error.log
+nm-backup
+uploads
+.env
+npm-debug.log
+archives

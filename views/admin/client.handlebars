@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+    {{> head subTitle=client.name }}
+    <body class="no-space">
+        {{> header arrowVisible="true" name=admin.name }}
+        {{> sidebar client name=admin.name email=admin.email}}
+        <div class="client-wrap wrapper">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero__content">
+                        <h1 class="flat hero__title">
+                            {{ client.name }}
+                        </h1>
+                        {{#ifGT client.daysSinceLastLogin 0 }}
+                        <p class="flat">Logged in {{ client.daysSinceLastLogin }} days ago</p>
+                        {{else}}
+                        <p class="flat">Has not logged in</p>
+                        {{/ifGT}}
+                    </div>
+                </div>
+            </div>
+            <div class="tabs tabs--{{ activeTab }}" id="tabs">
+                {{#ifGT holes.length 0 }}
+                <div class="tabs__footer tabs__footer--holes">
+                    <a href="create-hole.html" class="btn btn--block js-modal-open holes__btn" data-modal-id="addHoleModal" data-hole-id="{{ id }}">Add a hole</a>
+                </div>
+                {{/ifGT}}
+                <nav class="tabs__nav">
+                    <div class="container">
+                        <div class="tabs__nav-container">
+                            <a href="#" class="tabs__item tabs__item--holes" data-tab-id="holes">Holes (<i class="js-total-holes">{{ holes.length }}</i>)</a>
+                            <a href="#" class="tabs__item tabs__item--contacts" data-tab-id="contacts">Contacts (<i class="js-total-contacts">{{ contacts.length }}</i>)</a>
+                        </div>
+                    </div>
+                </nav>
+                <div class="tabs__content">
+                    <div class="tabs__pane">
+                        {{#ifGT holes.length 0 }}
+                        {{#each holes}}
+                        <div class="hole" data-hole-id="{{ id }}" data-hole-code="{{ code }}">
+                            <header class="hole__header">
+                                <h3 class="hole__number flat">
+                                    <strong>{{ code }}</strong>
+                                    <small>Last modified <span class="timestamp" data-timestamp="{{ createdAt }}"></span></small>
+                                </h3>
+                                <div class="loading_hide" id="uploading_{{ id }}">
+                                    <h5 class="loading__text">Uploading</h5>
+                                    <img style="block" src="/img/loader.gif" alt="uploading" width="30" height="30"/>
+                                </div>
+                                <div class="hole__actions">
+                                    <div class="hole__upload js-modal-open js-delete-hole" data-modal-id="deleteHoleModal" data-hole-id="{{ id }}" data-hole-code="{{ code }}">
+                                        <i class="fal fa-trash-alt"></i>
+                                    </div>
+                                    <form class="form" method="POST" class="dropzone" encType="multipart/form-data">
+                                        <div class="hole__upload uploadBtn" uid="{{ id }}" style="cursor:pointer">
+                                            <i class="fal fa-cloud-upload"></i>
+                                        </div>
+                                        <div class="dropzone__hide">
+                                            <input type="hidden" id="uploadHoleId_{{ id }}" uid="{{ id }}" name="holeId" value="{{ id }}">
+                                            <input type="file" name="file" class="uploadFile" id="uploadFile_{{ id }}" uid="{{ id }}">
+                                        </div>
+                                    </form>
+                                    <div class="hole__arrow js-hole-arrow">
+                                        <i class="fal fa-chevron-down"></i>
+                                    </div>
+                                </div>
+                            </header>
+                            <div class="hole__body">
+                                <div class="files files--{{id}} files--loading">
+                                    <div class="files__spinner">
+                                        <div class="sk-fading-circle">
+                                            <div class="sk-circle1 sk-circle"></div>
+                                            <div class="sk-circle2 sk-circle"></div>
+                                            <div class="sk-circle3 sk-circle"></div>
+                                            <div class="sk-circle4 sk-circle"></div>
+                                            <div class="sk-circle5 sk-circle"></div>
+                                            <div class="sk-circle6 sk-circle"></div>
+                                            <div class="sk-circle7 sk-circle"></div>
+                                            <div class="sk-circle8 sk-circle"></div>
+                                            <div class="sk-circle9 sk-circle"></div>
+                                            <div class="sk-circle10 sk-circle"></div>
+                                            <div class="sk-circle11 sk-circle"></div>
+                                            <div class="sk-circle12 sk-circle"></div>
+                                        </div>
+                                    </div>
+                                    <div class="files__body">
+                                        <div id="filesEl-{{id}}"></div>
+                                    </div>
+                                    <div class="files__empty">
+                                        <form method="POST" class="dropzone" encType="multipart/form-data">
+                                            <div class="dropzone__hide">
+                                                {{!-- <input type="hidden" name="holeId" value="{{id}}">
+                                                <input type="file" name="file">
+                                                <button>Submit</button> --}}
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{/each}}
+                        {{else}}
+                        <div class="empty-state">
+                            <h1 class="flat"><strong>No holes to show</strong></h1>
+                            <p>Create your first hole to begin uploading files</p>
+                            <a href="create-hole.html" class="btn js-modal-open holes__btn" data-modal-id="addHoleModal" data-hole-id="{{ id }}">Add a hole</a>
+                        </div>
+                        {{/ifGT}}
+                    </div>
+                    <div class="tabs__pane">
+                        <div id="contacts">
+                            <h3 class="tabs__title pressed"><strong>Contacts</strong></h3>
+                            <div class="contacts">
+                                <p>Users below will be emailed when a new hole is made or changes are made to an existing hole.</p>
+                                <div class="contact contact--add js-modal-open" data-modal-id="addContactModal">
+                                    <div class="contact__content">
+                                        <p class="flat">Invite a contact</p>
+                                    </div>
+                                    <div class="contact__delete">
+                                        <i class="fal fa-plus"></i>
+                                    </div>
+                                </div>
+                                {{#ifGT contacts.length 0 }}
+                                {{#each contacts}}
+                                <div class="contact card" data-contact-id="{{ id }}">
+                                    <div class="contact__content">
+                                        <h3 class="flat">{{ name }}</h3>
+                                        <p class="flat"><small>{{ role }}</small></p>
+                                        {{#if lastLoggedIn}}
+                                        <p class="flat ghosted contact__logged"><small class="tiny">Logged in <span class="timestamp" data-timestamp="{{ lastLoggedIn }}"></span></small></p>
+                                        {{ else }}
+                                            <p class="flat ghosted contact__logged"><small class="tiny">Hasn't logged in</small></p>
+                                        {{/if}}
+                                    </div>
+                                    <div class="contact__delete js-delete-contact js-modal-open" data-modal-id="deleteContactModal" data-contact-name="{{ name }}" data-contact-id="{{ id }}"}>
+                                        <small class="tiny">Delete</small>
+                                    </div>
+                                </div>
+                                {{/each}}
+                                {{/ifGT}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <!-- Add Client Modal -->
+        <div class="modal" id="addHoleModal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h1 class="flat"><span class="js-modal-title">Add a hole</span></h1>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="addHoleModal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="addHoleForm">
+                        <div class="form__body">
+                            <div class="form__group">
+                                <label for="clientName">Client name</label>
+                                <input class="input" readonly type="text" id="clientName" value="{{ client.name }}">
+                            </div>
+                            <input type="hidden" id="clientIdInput" value="{{ client.id }}">
+                            <div class="form__group">
+                                <label for="holeNumber">Hole number</label>
+                                <input class="input" type="text" id="holeNumber" required autofocus>
+                            </div>
+                        </div>
+                        <div class="form__footer">
+                            <button type="submit" class="btn btn--block form__button">Save hole</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Hole Modal -->
+        <div class="modal" id="deleteHoleModal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h1 class="flat"><span class="js-modal-title">Delete hole?</span></h1>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="deleteHoleModal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="deleteHoleForm" method="DELETE">
+                        <div class="form__body">
+                            <p>Deleting <strong class="js-hole-code">YC1234</strong> will delete any data associated with this hole and contacts will no longer be able to download existing files.</p>
+                        </div>
+                        <div class="form__footer form__footer--row">
+                            <span class="btn btn--simple form__button js-modal-close" data-modal-id="deleteHoleModal">Cancel</span>
+                            <button type="submit" class="btn form__button">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Hole Modal -->
+        <div class="modal" id="deleteFileModal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h1 class="flat"><span class="js-modal-title">Delete file?</span></h1>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="deleteFileModal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="deleteFileForm" method="DELETE">
+                        <div class="form__body">
+                            <p>Contacts will no longer be able to see <strong class="js-file-name"></strong></p>
+                        </div>
+                        <div class="form__footer form__footer--row">
+                            <span class="btn btn--simple form__button js-modal-close" data-modal-id="deleteFileModal">Cancel</span>
+                            <button type="submit" class="btn form__button">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Hole Modal -->
+        <div class="modal" id="deleteContactModal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h1 class="flat"><span class="js-modal-title">Delete contact?</span></h1>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="deleteContactModal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="deleteContactForm">
+                        <div class="form__body">
+                            <p>Deleting <strong class="js-contact-name"></strong> will delete their account and they will no longer have access to this clients data.</p>
+                        </div>
+                        <div class="form__footer form__footer--row">
+                            <span class="btn btn--simple form__button js-modal-close" data-modal-id="deleteContactModal">Cancel</span>
+                            <button type="submit" class="btn form__button">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Add Client Modal -->
+        <div class="modal" id="addContactModal" hidden>
+            <div class="modal__body">
+                <div class="header header--transparent header--unstuck">
+                    <div class="container header__container">
+                        <h1 class="flat"><span class="js-modal-title">Invite a contact</span></h1>
+                    </div>
+                    <div class="modal__close js-modal-close" data-modal-id="addContactModal">
+                        <i class="fal fa-times"></i>
+                    </div>
+                </div>
+                <div class="container">
+                    <form class="form" id="addContactForm">
+                        <div class="form__body">
+                            <p class="double-spacer"><small>This person will be emailed instructions on how to login and download data for Caledon Resources.</small></p>
+                            <p id="newContactExistsMessage" class="success-message" hidden>
+                                Contact already exists. Their existing details will be used.
+                            </p>
+                            <div class="form__group">
+                                <label for="contactEmail-1">Email address</label>
+                                <input class="input" type="email" id="contactEmail" required name="email" autofocus>
+                            </div>
+                            <div id="newContactDetails" class="form__optional">
+                                <div class="form__group">
+                                    <label for="contactName-1">Name</label>
+                                    <input class="input" type="text" id="contactName" required>
+                                </div>
+                                <div class="form__group">
+                                    <label for="contactRole-1">Job title</label>
+                                    <input class="input" type="text" id="contactRole" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form__footer">
+                            <button type="submit" class="btn btn--block form__button">Save contact</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/common.js"></script>
+        <script src="/js/admin.js"></script>
+    </body>
+</html>

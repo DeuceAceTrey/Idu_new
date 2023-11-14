@@ -1,0 +1,9 @@
+Welcome {{name}},
+
+Visit http://app.loggingdownunder.com.au/client and login using
+
+Your email is {{email}}
+Your password is {{password}}
+
+Regards,
+Logging Down Under

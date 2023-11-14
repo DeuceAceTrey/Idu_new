@@ -1,0 +1,7 @@
+Client Name: {{client.name}}
+
+Contact Name: {{contact.name}}
+
+File URL: {{file.name}}
+
+Message: {{message}}

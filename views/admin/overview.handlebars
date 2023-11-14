@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+{{> head subTitle="Clients"}}
+<body>
+    {{> header name=admin.name }}
+    {{> sidebar client name=admin.name email=admin.email }}
+    <div class="wrapper">
+        <div class="container" style="padding-top: 1.25rem">
+            {{#ifGT clients.length 0 }}
+                <div class="clients">
+                    <h2 class="title clients__title">Clients</h2>
+                    <div class="clients__wrap">
+                        {{#each clients}}
+                        <a href="/admin/client/{{id}}" class="card client js-client-link" data-client-id="{{id}}">
+                            <h2 class="card__title">{{ name }}</h2>
+                            <p class="flat card__meta">
+                                <small><span class="card__tag"><i class="js-total-holes"></i> hole<i class="js-total-holes-plural">s</i></span><span class="card__tag"><i class="js-total-contacts"></i> contact<i class="js-total-contacts-plural">s</i></span></small>
+                            </p>
+                            <div class="card__action js-delete-client js-modal-open" data-modal-id="deleteClientModal" data-client-name="{{ name }}" data-client-id="{{ id }}"}>
+                                <small class="tiny">Delete</small>
+                            </div>
+                        </a>
+                        {{/each}}
+                    </div>
+                </div>
+                <div class="clients__footer">
+                    <a class="btn btn--block js-modal-open" data-modal-id="addClientModal" href="create-client.html">Add a client</a>
+                </div>
+            {{else}}
+                <div class="empty-state" id="emptystate">
+                    <h1 class="pressed">
+                        <strong>Let's get started</strong>
+                    </h1>
+                    <p>To begin uploading files you first need to create a client.</p>
+                    <div class="empty-state__footer">
+                        <a class="btn js-modal-open" data-modal-id="addClientModal" href="create-client.html">Add a client</a>
+                    </div>
+                </div>
+            {{/ifGT}}
+        </div>
+    </div>
+
+    <!-- Add Client Modal -->
+    <div class="modal" id="addClientModal" hidden>
+        <div class="modal__body">
+            <div class="header header--transparent header--unstuck">
+                <div class="container header__container">
+                    <h2 class="flat"><strong>Create a client</strong></h2>
+                </div>
+                <div class="modal__close js-modal-close" data-modal-id="addClientModal">
+                    <i class="fal fa-times"></i>
+                </div>
+            </div>
+            <div class="container">
+                <form class="form" id="addClientForm">
+                    <div class="form__body">
+                        <div class="form__group">
+                            <label for="clientName">Client / Business Name</label>
+                            <input autofocus class="input" type="text" id="clientName" required name="name">
+                        </div>
+                        <hr class="form__divider">
+                        <h3 class="flat"><strong>Invite a contact</strong></h3>
+                        <p class="double-spacer"><small>Contacts will be emailed instructions on how to view and download this clients data.</small></p>
+                        <p id="newContactExistsMessage" class="success-message" hidden>
+                            Contact already exists. Their existing details will be used.
+                        </p>
+                        <div class="form__group">
+                            <label for="contactEmail-1">Email address</label>
+                            <input class="input" type="email" id="contactEmail" required name="email">
+                        </div>
+                        <div id="newContactDetails" class="form__optional">
+                            <div class="form__group">
+                                <label for="contactName-1">Name</label>
+                                <input class="input" type="text" id="contactName" required>
+                            </div>
+                            <div class="form__group">
+                                <label for="contactRole-1">Job title</label>
+                                <input class="input" type="text" id="contactRole" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form__footer">
+                        <button type="submit" class="btn btn--block form__button">Save client</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Client Modal -->
+    <div class="modal" id="deleteClientModal" hidden>
+        <div class="modal__body">
+            <div class="header header--transparent header--unstuck">
+                <div class="container header__container">
+                    <h2 class="flat"><strong>Delete client?</strong></h2>
+                </div>
+                <div class="modal__close js-modal-close" data-modal-id="deleteClientModal">
+                    <i class="fal fa-times"></i>
+                </div>
+            </div>
+            <div class="container">
+                <form class="form" id="deleteClientForm">
+                    <div class="form__body">
+                        <p>Deleting <strong class="js-client-name"></strong> will delete all holes and any data associated with this client and contacts will no longer be able to download existing files.</p>
+                    </div>
+                    <div class="form__footer form__footer--row">
+                        <span class="btn btn--simple form__button js-modal-close" data-modal-id="deleteClientModal">Cancel</span>
+                        <button type="submit" class="btn form__button">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+</html>

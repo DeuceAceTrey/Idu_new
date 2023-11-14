@@ -1,0 +1,8 @@
+Hello {{contact.name}},
+
+New files were uploaded for hole: {{hole.code}}.
+
+http://app.loggingdownunder.com.au/client
+
+Regards,
+Logging Down Under

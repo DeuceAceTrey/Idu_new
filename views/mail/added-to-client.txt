@@ -1,0 +1,8 @@
+Hello {{contact}},
+
+You have been added to {{client}}.
+
+Login to https://app.loggingdownunder.com.au/client to view.
+
+Regards,
+Logging Down Under
