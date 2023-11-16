@@ -5,6 +5,7 @@ const passport = require("passport");
 const epilogue = require("epilogue");
 const moment = require("moment");
 const secure = require("express-force-https");
+const upload = require("./upload");
 const download = require("./download");
 
 // const multer = require("multer");
@@ -109,12 +110,35 @@ app.get(
     admin.getNumberOfContacts
 );
 
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, `uploads/${req.params.holeId}`);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+});
+
+const fileUplaod = multer({ storage: storage });
+
+app.post(
+    "/upload/:holeId/:file_name/:file_category/:file_size",
+    checkAdminLogin,
+    upload.middleware,
+    fileUplaod.single("file"),
+    upload.uploadFile
+);
+app.get("/upload/progress", checkAdminLogin, upload.sendProgress);
+
 app.post(
     "/download",
     checkClientLogin,
     download.middleware,
-    download.fileDownload
+    download.downloadFile
 );
+app.get("/download/progress", checkClientLogin, download.sendProgress);
 
 // Client Routes
 app.get("/client", checkClientLogin, (req, res) => {
@@ -220,28 +244,6 @@ app.get("/logout", (req, res) => {
     req.logout();
     res.redirect("/");
 });
-
-const upload = require("./upload");
-
-const multer = require("multer");
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, `uploads/${req.params.holeId}`);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    },
-});
-
-const fileUplaod = multer({ storage: storage });
-
-app.post(
-    "/upload/:holeId/:file_name/:file_category/:file_size",
-    upload.middleware,
-    fileUplaod.single("file"),
-    upload.singleFile
-);
 
 // app.post('/public/upload/:holeId/:file_size', upload.array("files"), checkAdminLogin, file_upload.middleware, file_upload.singleFile)
 // app.post('/public/upload/zip', checkAdminLogin, upload.middleware, upload.zipFile)

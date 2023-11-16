@@ -1,5 +1,5 @@
 module.exports = {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: "AKIAJMILEV4I6Z277ZBQ",
+    secretAccessKey: "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",
     region: "ap-southeast-2",
 };

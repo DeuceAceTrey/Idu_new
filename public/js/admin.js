@@ -27,6 +27,8 @@ var deleteClientBtns = document.querySelectorAll(".js-delete-client");
 var deleteHoleBtns = document.querySelectorAll(".js-delete-hole");
 var deleteContactBtns = document.querySelectorAll(".js-delete-contact");
 
+var progressValue = 0;
+
 if (clients) {
     if (clients.offsetHeight + 89 > window.innerHeight) {
         document
@@ -374,9 +376,6 @@ if (deleteHoleForm) {
 $(".uploadBtn").on("click", function () {
     var id = $(this).attr("uid");
     $("#uploadFile_" + id).click();
-
-    var element = $("#uploading_" + id);
-    element.removeClass("loading_hide").addClass("loading_show");
 });
 
 $(".uploadFile").on("change", function (e) {
@@ -386,6 +385,8 @@ $(".uploadFile").on("change", function (e) {
 
     if (e.target.files[0]) {
         var holeId = id;
+
+        var element = $("#uploading_" + holeId);
 
         var file_name = e.target.files[0].name;
 
@@ -411,11 +412,11 @@ $(".uploadFile").on("change", function (e) {
             method: "POST",
             dataType: "json",
             data: formData,
+            // timeout: 3600 * 1000,
             success: function (data) {
-                var element = $("#uploading_" + id);
-                element.removeClass("loading_show").addClass("loading_hide");
+                console.log(data);
 
-                alert(data);
+                element.removeClass("loading_hide").addClass("loading_show");
             },
             error: function (err) {
                 console.log(err);
@@ -424,6 +425,45 @@ $(".uploadFile").on("change", function (e) {
             contentType: false,
             async: false,
         });
+
+        let timer = null;
+
+        function sendReq() {
+            $.ajax({
+                method: "GET",
+                url: "/upload/progress",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+            })
+                .done(function (data) {
+                    progressValue = data;
+                    $("#UploadProgress_" + id).text(
+                        "Uploading (" + " " + progressValue + "% )"
+                    );
+                    console.log("status", progressValue);
+
+                    if (progressValue == 100) {
+                        console.log("Upload End");
+                        clearInterval(timer);
+
+                        setTimeout(function () {
+                            element
+                                .removeClass("loading_show")
+                                .addClass("loading_hide");
+
+                            progressValue = 0;
+                        }, 2000);
+                    }
+                })
+                .fail(function (ex) {
+                    console.log("parsing failed: ", ex);
+                });
+        }
+
+        sendReq();
+        timer = setInterval(sendReq, 1000);
     }
 });
 

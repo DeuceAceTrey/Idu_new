@@ -64,4 +64,3 @@ make deploy
 ## Assumptions
 
 - No restrictions are placed on authed administrators. For this reason, periodic database backups should be performed.
-"# Idu_new" 

@@ -7,6 +7,9 @@ var sendMessageBtns = document.querySelectorAll(".js-send-message");
 var holeArrows = document.querySelectorAll(".js-hole-arrow");
 var clientIdInput = document.getElementById("clientId");
 var clientId = clientIdInput.value;
+
+var progressValue = 0;
+
 window.Handlebars.registerHelper("ifEquals", function (arg1, arg2, options) {
     return arg1 == arg2 ? options.fn(this) : options.inverse(this);
 });
@@ -16,7 +19,6 @@ var filesTemplate = window.Handlebars.compile(
 );
 var fileDownload = function (holeId, name) {
     var element = $("#downloading_" + holeId);
-    element.removeClass("loading_hide").addClass("loading_show");
 
     var payload = {
         holeId,
@@ -29,21 +31,65 @@ var fileDownload = function (holeId, name) {
             Accept: "application/json",
             "Content-Type": "application/json",
         },
+        // timeout: 3600 * 1000,
         data: JSON.stringify(payload),
         success: function (data) {
-            // const url = window.URL.createObjectURL(new Blob([data]));
-            const link = document.createElement("a");
-            link.href = data;
-            link.setAttribute("download", name);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
+            element.removeClass("loading_hide").addClass("loading_show");
 
-            element.removeClass("loading_show").addClass("loading_hide");
-
-            alert("The file has been downloaded successfully.");
+            console.log(data);
         },
+        error: function (err) {
+            console.log(err);
+        },
+        async: false,
     });
+
+    let timer = null;
+
+    function sendReq() {
+        $.ajax({
+            method: "GET",
+            url: "/download/progress",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+        })
+            .done(function (data) {
+                progressValue = data;
+
+                $("#downloadProgress_" + holeId).text(
+                    "Downloading (" + " " + progressValue + "% )"
+                );
+                console.log("status", progressValue);
+
+                if (progressValue == 100) {
+                    console.log("Download End");
+                    clearInterval(timer);
+
+                    setTimeout(function () {
+                        const link = document.createElement("a");
+                        link.href = `/downloads/${holeId}/${name}`;
+                        link.setAttribute("download", name);
+                        document.body.appendChild(link);
+                        link.click();
+                        link.remove();
+
+                        element
+                            .removeClass("loading_show")
+                            .addClass("loading_hide");
+
+                        progressValue = 0;
+                    }, 3000);
+                }
+            })
+            .fail(function (ex) {
+                console.log("parsing failed: ", ex);
+            });
+    }
+
+    sendReq();
+    timer = setInterval(sendReq, 1000);
 };
 var renderFiles = function (files, holeId) {
     if (files.length) {
